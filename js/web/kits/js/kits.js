@@ -29,7 +29,7 @@ let Kits = {
 		let data = localStorage.getItem('KnownKitsData');
 
 		if(data === null || MainParser.checkNextUpdate('KnownKitsDate') === true){
-			MainParser.loadJSON('https://cache.foe-rechner.de/kits/sets.json', (data)=>{
+			MainParser.loadJSON('http://127.0.0.1:8080/sets.json', (data)=>{
 
 				localStorage.setItem('KnownKitsData', data);
 				localStorage.setItem('KnownKitsDate', MainParser.getAddedDateTime(48));
