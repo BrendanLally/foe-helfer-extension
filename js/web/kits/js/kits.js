@@ -112,7 +112,8 @@ let Kits = {
 			let buildings = [],
 				assetRow = [],
 				show = false,
-				missings = [];
+				missings = [],
+				shortfall = 0;
 
 			// step buildings in a set
 			for(let i in kits[set]['buildings'])
@@ -123,6 +124,7 @@ let Kits = {
 
 				const building = kits[set]['buildings'][i];
 				let itemRow = [];
+				let piecesNeeded = building['levels'];
 
 				// Level 1
 				let itemL1 = inv.find(el => el['item']['cityEntityId'] === building['first']),
@@ -134,6 +136,7 @@ let Kits = {
 				}
 
 				if(itemL1){
+					piecesNeeded--
 					itemRow.push({
 						type: 'first',
 						item: itemL1,
@@ -153,6 +156,7 @@ let Kits = {
 				}
 
 				if(itemUgr){
+					piecesNeeded-=itemUgr.inStock
 
 					if(!itemL1 && Kits.ShowMissing){
 						itemRow.push({
@@ -194,6 +198,9 @@ let Kits = {
 
 				if(itemRow.length){
 					buildings.push(itemRow);
+				}
+				if (piecesNeeded >0) {
+					shortfall += piecesNeeded;
 				}
 			}
 
@@ -238,7 +245,7 @@ let Kits = {
 
 				// selection kit exist
 				if(k){
-
+					shortfall -= k.inStock;
 					if(!buildings && Kits.ShowMissing){
 						buildings = missings;
 					}
@@ -253,6 +260,12 @@ let Kits = {
 
 			if(kitRow.length){
 				show = true;
+			}
+			
+			if(shortfall >0 ) {
+				console.log(kits[set]['name'] + " Is Incomplete");
+			} else {
+				console.log(kits[set]['name'] + " Is Complete");
 			}
 
 			if(show)
